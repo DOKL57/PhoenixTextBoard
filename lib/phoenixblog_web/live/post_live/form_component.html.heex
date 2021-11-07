@@ -16,6 +16,10 @@
     <%= label f, :title %>
     <%= text_input f, :title %>
     <%= error_tag f, :title %>
+
+    <%= label f, :tags %>
+    <%= text_input f, :tags %>
+    <%= error_tag f, :tags %>
   
     <div>
       <%= submit "Save", phx_disable_with: "Saving..." %>

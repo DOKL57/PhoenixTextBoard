@@ -1,11 +1,14 @@
 defmodule Phoenixblog.Blog.Post do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Phoenixblog.Repo
+
 
   schema "posts" do
     field :body, :string
     field :title, :string
 
+    many_to_many :tags, Phoenixblog.Blog.Tag, join_through: "posts_tags", on_replace: :delete
     timestamps()
   end
 

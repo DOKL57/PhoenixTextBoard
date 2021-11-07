@@ -99,7 +99,9 @@ defmodule Phoenixblog.Blog do
 
   """
   def change_post(%Post{} = post, attrs \\ %{}) do
-    Post.changeset(post, attrs)
+    post
+    |> Repo.preload(:tags)
+    |> Post.changeset(attrs)
   end
 
   alias Phoenixblog.Blog.Tag
