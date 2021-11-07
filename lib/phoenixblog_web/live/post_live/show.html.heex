@@ -21,8 +21,12 @@
     <%= @post.title %>
         <%= @post.title %>
   </li>
-  <li>tags:</li>
-
+  <li>
+    <strong>Tags:</strong>
+    <%= for t <- @post.tags do %>
+      <span style='background-color: #ddd; padding: 4px; margin: 2px;display: inline-block'><%= t.name %></span>
+    <% end %>
+  </li>
 </ul>
 
 <span><%= live_patch "Edit", to: Routes.post_show_path(@socket, :edit, @post), class: "button" %></span> |

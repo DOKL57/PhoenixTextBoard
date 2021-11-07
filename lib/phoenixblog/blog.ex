@@ -5,8 +5,9 @@ defmodule Phoenixblog.Blog do
 
   import Ecto.Query, warn: false
   alias Phoenixblog.Repo
-
+  alias Ecto.Multi
   alias Phoenixblog.Blog.Post
+  alias PhoenixblogWeb.Blog.PostTag
 
   @doc """
   Returns the list of posts.
@@ -37,6 +38,10 @@ defmodule Phoenixblog.Blog do
   """
   def get_post!(id), do: Repo.get!(Post, id)
 
+  def get_post_with_tags!(id) do
+    Post |> preload(:tags) |> Repo.get!(id)
+  end
+
   @doc """
   Creates a post.
 
@@ -50,9 +55,10 @@ defmodule Phoenixblog.Blog do
 
   """
   def create_post(attrs \\ %{}) do
-    %Post{}
-    |> Post.changeset(attrs)
-    |> Repo.insert()
+    create_or_update_post(%Post{}, attrs)
+    # %Post{}
+    # |> Post.changeset(attrs)
+    # |> Repo.insert()
   end
 
   @doc """
@@ -68,9 +74,10 @@ defmodule Phoenixblog.Blog do
 
   """
   def update_post(%Post{} = post, attrs) do
-    post
-    |> Post.changeset(attrs)
-    |> Repo.update()
+    create_or_update_post(post, attrs)
+    # post
+    # |> Post.changeset(attrs)
+    # |> Repo.update()
   end
 
   @doc """
@@ -135,6 +142,27 @@ defmodule Phoenixblog.Blog do
   """
   def get_tag!(id), do: Repo.get!(Tag, id)
 
+  def get_tags_by_id(id) do
+    tag_names = Repo.all(from(t in PostTag, where: t.post_id == ^id))
+    tag_list = []
+
+    tag_list =
+      Enum.reduce(tag_names, tag_list, fn x, acc ->
+        [x.tag_id | acc]
+      end)
+
+    IO.inspect(tag_list)
+    tag_names = Repo.all(from(t in Tag, where: t.name in ^tag_list))
+    tag_names_list = []
+
+    tag_names_list =
+      Enum.reduce(tag_names, tag_names_list, fn x, acc ->
+        [x.name | acc]
+      end)
+
+    tag_names_list
+  end
+
   @doc """
   Creates a tag.
 
@@ -198,5 +226,38 @@ defmodule Phoenixblog.Blog do
   """
   def change_tag(%Tag{} = tag, attrs \\ %{}) do
     Tag.changeset(tag, attrs)
+  end
+
+  defp create_or_update_post(post, attrs) do
+    Multi.new()
+    |> ensure_tags(attrs["tags"])
+    |> Multi.run(:post, fn repo, %{find_tags: tags} ->
+      post
+      |> Post.changeset(attrs)
+      |> Ecto.Changeset.put_assoc(:tags, tags)
+      |> repo.insert()
+    end)
+    |> Repo.transaction()
+  end
+
+  defp ensure_tags(multi, tags) do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+    tags =
+      tags
+      |> to_string
+      |> String.split(",")
+      |> Enum.map(fn tag -> String.trim(tag) end)
+      |> Enum.reject(fn tag -> tag == "" end)
+      |> Enum.map(fn tag_name ->
+        %{name: tag_name, inserted_at: now, updated_at: now}
+      end)
+
+    multi
+    |> Multi.insert_all(:insert_tags, Tag, tags, on_conflict: :nothing)
+    |> Multi.run(:find_tags, fn repo, _ ->
+      tag_names = Enum.map(tags, & &1.name)
+      {:ok, repo.all(from(t in Tag, where: t.name in ^tag_names))}
+    end)
   end
 end
