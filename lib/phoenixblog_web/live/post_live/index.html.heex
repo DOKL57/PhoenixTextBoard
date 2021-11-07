@@ -12,7 +12,6 @@
 <table>
   <thead>
     <tr>
-      <th>Body</th>
       <th>Title</th>
 
       <th></th>
@@ -21,7 +20,6 @@
   <tbody id="posts">
     <%= for post <- @posts do %>
       <tr id={"post-#{post.id}"}>
-        <td><%= post.body %></td>
         <td><%= post.title %></td>
 
         <td>

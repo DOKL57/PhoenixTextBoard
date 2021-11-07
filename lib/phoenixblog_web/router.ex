@@ -17,7 +17,7 @@ defmodule PhoenixblogWeb.Router do
   scope "/", PhoenixblogWeb do
     pipe_through :browser
 
-    live "/posts", PostLive.Index, :index
+    live "/", PostLive.Index, :index
     live "/posts/new", PostLive.Index, :new
     live "/posts/:id/edit", PostLive.Index, :edit
 
@@ -25,7 +25,7 @@ defmodule PhoenixblogWeb.Router do
     live "/posts/:id/show/edit", PostLive.Show, :edit
 
 
-    get "/", PageController, :index
+    #get "/", PageController, :index
   end
 
   # Other scopes may use custom stacks.
