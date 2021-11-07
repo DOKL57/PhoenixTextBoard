@@ -14,7 +14,7 @@ defmodule PhoenixblogWeb.PostLive.Show do
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
      |> assign(:post, Blog.get_post_with_tags!(id))}
-     |> assign(:tags, Blog.get_tags_by_id(id))
+     #|> assign(:tags, Blog.get_tags_by_id(id))
   end
 
   defp page_title(:show), do: "Show Post"

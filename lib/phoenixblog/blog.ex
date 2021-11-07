@@ -152,15 +152,7 @@ defmodule Phoenixblog.Blog do
       end)
 
     IO.inspect(tag_list)
-    tag_names = Repo.all(from(t in Tag, where: t.name in ^tag_list))
-    tag_names_list = []
 
-    tag_names_list =
-      Enum.reduce(tag_names, tag_names_list, fn x, acc ->
-        [x.name | acc]
-      end)
-
-    tag_names_list
   end
 
   @doc """

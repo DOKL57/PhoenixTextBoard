@@ -3,9 +3,11 @@ defmodule Phoenixblog.Repo.Migrations.CreateTags do
 
   def change do
     create table(:tags) do
-      add :name, :string
+      add(:name, :string)
 
       timestamps()
     end
+
+    create(index("tags", [:name], unique: true))
   end
 end
