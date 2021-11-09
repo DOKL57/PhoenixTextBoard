@@ -1,5 +1,37 @@
 Posts list with tag:        <span style='background-color: #ddd; padding: 4px; margin: 2px;display: inline-block'><%= @tag %></span>
 
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+
+      <th>Actions</th>
+            <th>Tags</th>
+
+      <th>Created at</th>
+      <th>Updated at</th>
+
+    </tr>
+  </thead>
+  <tbody id="posts">
+    <%= for post <- @posts do %>
+      <tr id={"post-#{post.id}"}>
+        <td><%= post.title %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.post_show_path(@socket, :show, post) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: post.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+
+        <td>  <%= for t <- post.tags do %>
+      <span style='background-color: #ddd; padding: 4px; margin: 2px;display: inline-block'><%= live_redirect "#{t.name}", to: Routes.post_tag_path(@socket, :show, t.name)%></span>
+    <% end %></td>
+       <td><%= post.inserted_at %></td>
+        <td><%= post.updated_at %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 
 <br>
 <span><%= live_redirect "Back", to: Routes.post_index_path(@socket, :index) %></span>

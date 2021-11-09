@@ -3,6 +3,7 @@ defmodule PhoenixblogWeb.PostLive.Tag do
 
   alias Phoenixblog.Blog
   alias Phoenixblog.Repo
+  alias Phoenixblog.Blog.Post
 
   @impl true
   def mount(_params, _session, socket) do
@@ -25,12 +26,13 @@ defmodule PhoenixblogWeb.PostLive.Tag do
       end
       |> List.flatten()
       |> Enum.reject(&is_nil/1)
+      posts = []
 
-    IO.inspect(posts_ids)
-    # IO.inspect(post_without_tags)
+      posts = Enum.map(posts_ids, fn x -> [Repo.get(Post, x) | posts] end) |> List.flatten() |> Repo.preload(:tags)
 
     {:noreply,
      socket
-     |> assign(:tag, tag)}
+     |> assign(:tag, tag)
+    |> assign(:posts, posts)}
   end
 end
