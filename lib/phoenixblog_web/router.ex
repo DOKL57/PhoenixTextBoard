@@ -17,6 +17,7 @@ defmodule PhoenixblogWeb.Router do
   scope "/", PhoenixblogWeb do
     pipe_through :browser
 
+    live "/tag/:tag", PostLive.Tag, :show
     live "/", PostLive.Index, :index
     live "/posts/new", PostLive.Index, :new
     live "/posts/:id/edit", PostLive.Index, :edit

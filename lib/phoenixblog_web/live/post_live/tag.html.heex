@@ -1,0 +1,5 @@
+Posts list with tag:        <span style='background-color: #ddd; padding: 4px; margin: 2px;display: inline-block'><%= @tag %></span>
+
+
+<br>
+<span><%= live_redirect "Back", to: Routes.post_index_path(@socket, :index) %></span>
