@@ -3,6 +3,8 @@ defmodule PhoenixblogWeb.PostLive.Index do
 
   alias Phoenixblog.Blog
   alias Phoenixblog.Blog.Post
+  alias Phoenixblog.Repo
+
 
   @impl true
   def mount(_params, _session, socket) do
@@ -42,5 +44,6 @@ defmodule PhoenixblogWeb.PostLive.Index do
 
   defp list_posts do
     Blog.list_posts()
+    |> Repo.preload(:tags)
   end
 end
