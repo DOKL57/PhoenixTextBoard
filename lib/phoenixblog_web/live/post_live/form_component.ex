@@ -6,11 +6,7 @@ defmodule PhoenixblogWeb.PostLive.FormComponent do
   alias Phoenixblog.Blog.Tag
 
   def tags_input(form) do
-    tags_string =
-      form
-      |> input_value(:tags)
-      |> Enum.map(&tag_to_string/1)
-      |> Enum.join(", ")
+    tags_string = form.data.tags |> Enum.map(&tag_to_string/1) |> Enum.join(", ") #|> IO.inspect()
 
     text_input(form, :tags, value: tags_string)
   end
@@ -23,7 +19,6 @@ defmodule PhoenixblogWeb.PostLive.FormComponent do
     tag.name
   end
 
-
   @impl true
   def update(%{post: post} = assigns, socket) do
     changeset = Blog.change_post(post)
@@ -33,6 +28,13 @@ defmodule PhoenixblogWeb.PostLive.FormComponent do
      |> assign(assigns)
      |> assign(:changeset, changeset)}
   end
+
+  """
+    def handle_event(event, params, socket) do
+      IO.inspect({event, params}, label: "Got unknown event")
+      {:noreply, socket}
+    end
+  """
 
   @impl true
   def handle_event("validate", %{"post" => post_params}, socket) do

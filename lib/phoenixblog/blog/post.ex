@@ -15,6 +15,7 @@ defmodule Phoenixblog.Blog.Post do
   @doc false
   def changeset(post, attrs) do
     post
+    |> Repo.preload(:tags)
     |> cast(attrs, [:body, :title])
     |> validate_required([:body, :title])
   end

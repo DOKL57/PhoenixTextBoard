@@ -109,6 +109,7 @@ defmodule Phoenixblog.Blog do
     post
     |> Repo.preload(:tags)
     |> Post.changeset(attrs)
+    #|> Ecto.Changeset.cast_assoc(:tags)
   end
 
   alias Phoenixblog.Blog.Tag
