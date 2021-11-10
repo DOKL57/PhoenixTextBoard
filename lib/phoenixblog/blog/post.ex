@@ -9,6 +9,7 @@ defmodule Phoenixblog.Blog.Post do
     field :title, :string
 
     many_to_many :tags, Phoenixblog.Blog.Tag, join_through: "posts_tags", on_replace: :delete
+    has_many :comments, Phoenixblog.Blog.Comment
     timestamps()
   end
 
