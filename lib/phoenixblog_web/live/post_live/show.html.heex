@@ -53,4 +53,26 @@
       <%= submit "Save", phx_disable_with: "Saving..." %>
     </div>
   </.form>
+
+  List comments:
+   <table>
+     <thead>
+    <tr>
+      <th>Name</th>
+      <th>Comment</th>
+    </tr>
+      </thead>
+
+    <tbody id="comments">
+    <%= for t <- @post.comments do %>
+      <tr id={"comment-#{t.id}"}>
+
+
+      <td><%= t.name %></td>
+      <td><%= t.body %></td>
+
+    </tr>
+    <% end %>
+    </tbody>
+</table>
 <span><%= live_redirect "Back", to: Routes.post_index_path(@socket, :index) %></span>

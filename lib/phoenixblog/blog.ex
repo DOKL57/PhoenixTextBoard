@@ -21,6 +21,9 @@ defmodule Phoenixblog.Blog do
     Repo.all(Post)
   end
 
+  def list_comments(id) do
+    Repo.all(from c in Comment, where: c.post_id == ^id)
+  end
   @doc """
   Gets a single post.
 
