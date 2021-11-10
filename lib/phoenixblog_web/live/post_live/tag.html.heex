@@ -27,7 +27,6 @@ Posts list with tag:        <span style='background-color: #ddd; padding: 4px; m
       <span style='background-color: #ddd; padding: 4px; margin: 2px;display: inline-block'><%= live_redirect "#{t.name}", to: Routes.post_tag_path(@socket, :show, t.name)%></span>
     <% end %></td>
        <td><%= post.inserted_at %></td>
-        <td><%= post.updated_at %></td>
       </tr>
     <% end %>
   </tbody>
