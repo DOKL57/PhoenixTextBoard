@@ -60,10 +60,14 @@ defmodule Phoenixblog.Blog do
     # |> Repo.insert()
   end
 
-  def add_comment(%Post{} = post, attrs) do
+
+
+
+  def update_post_with_comments(post, attrs \\ %{}) do
     post
-    |> Ecto.build_assoc(:comments, attrs)
-    |> Repo.insert()
+    |> Post.changeset(attrs)
+    |> Ecto.Changeset.cast_assoc(:comments, with: &Comment.changeset/2)
+    |> Repo.update()
   end
 
   @doc """

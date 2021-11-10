@@ -1,7 +1,6 @@
 defmodule Phoenixblog.Blog.Post do
   use Ecto.Schema
   import Ecto.Changeset
-  alias Phoenixblog.Repo
 
 
   schema "posts" do
@@ -16,7 +15,6 @@ defmodule Phoenixblog.Blog.Post do
   @doc false
   def changeset(post, attrs) do
     post
-    |> Repo.preload(:tags)
     |> cast(attrs, [:body, :title])
     |> validate_required([:body, :title])
   end

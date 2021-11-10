@@ -3,6 +3,8 @@ defmodule PhoenixblogWeb.PostLive.Show do
 
   alias Phoenixblog.Blog
   alias Phoenixblog.Blog.Comment
+  alias Phoenixblog.Blog.Post
+  alias Phoenixblog.Repo
 
   @impl true
   def mount(_params, _session, socket) do
@@ -17,36 +19,67 @@ defmodule PhoenixblogWeb.PostLive.Show do
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
      |> assign(:post, Blog.get_post_with_tags!(id))
-     |> assign(:changeset, changeset)}
+     |> assign(:changeset, changeset)
+     |> assign(:id, id)}
   end
 
   """
+
   @impl true
   def handle_event(event, params, socket) do
     IO.inspect({event, params}, label: "Got unknown event")
     {:noreply, socket}
   end
-"""
-  @impl true
-  def handle_event("validate", %{"comment" => comment_params}, socket) do
-    changeset = Blog.change_comment(%Comment{})
+  """
 
-    {:noreply, assign(socket, :changeset, changeset)}
+  @impl true
+  def handle_event("validate_comment", %{"post" => comment_params}, socket) do
+    changeset =
+      socket.assigns.post
+      |> Post.changeset(comment_params)
+      |> Ecto.Changeset.cast_assoc(:comments)
+      |> Map.put(:action, :update)
+
+    {:noreply,
+     socket
+     |> assign(:changeset, changeset)}
   end
 
   @impl true
-  def handle_event("save", %{"comment" => comment_params}, socket) do
-    #добавить сюда нормальное сохранение
-    case Blog.add_comment(socket.assigns.post, comment_params) do
-      {:ok, _post} ->
-        {:noreply,
-         socket
-         |> put_flash(:info, "Comment_added")}
+  def handle_event("validate_comment", %{"comment" => comment_params}, socket) do
+    changeset =
+      socket.assigns.post
+      |> Post.changeset(comment_params)
+      |> Ecto.Changeset.cast_assoc(:comments)
+      |> Map.put(:action, :update)
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, :changeset, changeset)}
-       end
-      end
+    {:noreply,
+     socket
+     |> assign(:changeset, changeset)}
+  end
+
+  @impl true
+  def handle_event("save", %{"post" => comment_params}, socket) do
+    # добавить сюда нормальное сохранение
+    # потом лист комментов и выводить его в темплейт
+    com = %Comment{
+      body: Map.get(comment_params, "body"),
+      name: Map.get(comment_params, "name"),
+      post_id: socket.assigns.id
+    }
+
+      socket.assigns.post
+      |> Ecto.Changeset.change()
+      |> Ecto.Changeset.put_assoc(:comments, [com | socket.assigns.post.comments])
+      |> Repo.update()
+
+      socket
+      |> put_flash(:info, "Comment created successfully.")
+
+
+
+    {:noreply, assign(socket, changeset: socket.assigns.changeset)}
+  end
 
   defp page_title(:show), do: "Show Post"
 end
