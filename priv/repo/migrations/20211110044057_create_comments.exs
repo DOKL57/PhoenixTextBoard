@@ -3,8 +3,8 @@ defmodule Phoenixblog.Repo.Migrations.CreateComments do
 
   def change do
     create table(:comments) do
-      add :name, :string
-      add :body, :string
+      add :name, :string, null: false
+      add :body, :string, null: false
       add :post_id, references(:posts, on_delete: :delete_all)
 
       timestamps()

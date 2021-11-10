@@ -6,8 +6,7 @@ defmodule Phoenixblog.Blog do
   import Ecto.Query, warn: false
   alias Phoenixblog.Repo
   alias Ecto.Multi
-  alias Phoenixblog.Blog.Post
-  alias PhoenixblogWeb.Blog.PostTag
+  alias Phoenixblog.Blog.{Post, Comment, PostTag, Tag}
 
   @doc """
   Returns the list of posts.
@@ -59,6 +58,12 @@ defmodule Phoenixblog.Blog do
     # %Post{}
     # |> Post.changeset(attrs)
     # |> Repo.insert()
+  end
+
+  def add_comment(%Post{} = post, attrs) do
+    post
+    |> Ecto.build_assoc(:comments, attrs)
+    |> Repo.insert()
   end
 
   @doc """
@@ -114,7 +119,9 @@ defmodule Phoenixblog.Blog do
     # |> Ecto.Changeset.cast_assoc(:tags)
   end
 
-  alias Phoenixblog.Blog.Tag
+  def change_comment(%Comment{} = comment) do
+    Comment.changeset(comment, %{})
+  end
 
   @doc """
   Returns the list of tags.

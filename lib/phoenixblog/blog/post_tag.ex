@@ -1,4 +1,4 @@
-defmodule PhoenixblogWeb.Blog.PostTag do
+defmodule Phoenixblog.Blog.PostTag do
   use Ecto.Schema
   import Ecto.Changeset
 
