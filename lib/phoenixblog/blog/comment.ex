@@ -7,7 +7,6 @@ defmodule Phoenixblog.Blog.Comment do
     field :name, :string
     field :post_id, :id
 
-    belongs_to :posts, Phoenixblog.Blog.Post
     timestamps()
   end
 

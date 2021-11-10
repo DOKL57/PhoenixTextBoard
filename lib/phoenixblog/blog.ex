@@ -39,7 +39,7 @@ defmodule Phoenixblog.Blog do
   def get_post!(id), do: Repo.get!(Post, id)
 
   def get_post_with_tags!(id) do
-    Post |> preload(:tags) |> Repo.get!(id)
+    Post |> preload(:tags) |> preload(:comments) |> Repo.get!(id)
   end
 
   @doc """
@@ -108,8 +108,10 @@ defmodule Phoenixblog.Blog do
   def change_post(%Post{} = post, attrs \\ %{}) do
     post
     |> Repo.preload(:tags)
+    |> Repo.preload(:comments)
     |> Post.changeset(attrs)
-    #|> Ecto.Changeset.cast_assoc(:tags)
+
+    # |> Ecto.Changeset.cast_assoc(:tags)
   end
 
   alias Phoenixblog.Blog.Tag
@@ -153,7 +155,6 @@ defmodule Phoenixblog.Blog do
       end)
 
     IO.inspect(tag_list)
-
   end
 
   @doc """

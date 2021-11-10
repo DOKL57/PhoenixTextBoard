@@ -29,4 +29,26 @@
   </li>
 </ul>
 
+<div class="add_comments">Add comments:</div>
+<.form
+    let={f}
+    for={@changeset}
+    id="comments-form"
+    phx-target={@myself}
+    phx-change="validate"
+    phx-submit="save">
+  
+    <%= label f, :body %>
+    <%= textarea f, :body %>
+    <%= error_tag f, :body %>
+  
+    <%= label f, :name %>
+    <%= text_input f, :name %>
+    <%= error_tag f, :name %>
+
+  
+    <div>
+      <%= submit "Save", phx_disable_with: "Saving..." %>
+    </div>
+  </.form>
 <span><%= live_redirect "Back", to: Routes.post_index_path(@socket, :index) %></span>
