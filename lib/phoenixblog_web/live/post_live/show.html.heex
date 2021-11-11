@@ -29,30 +29,6 @@
   </li>
 </ul>
 
-<div class="add_comments">Add comment:</div>
-<.form
-    let={f}
-    for={@changeset}
-    id="comments-form"
-    phx-change="validate_comment"
-    phx-submit="save">
-  
-
-    <%= label f, :name %>
-    <%= text_input f, :name %>
-    <%= error_tag f, :name %>
-
-    <%= label f, :body %>
-    <%= textarea f, :body %>
-    <%= error_tag f, :body %>
-  
-
-
-  
-    <div>
-      <%= submit "Save", phx_disable_with: "Saving..." %>
-    </div>
-  </.form>
 
   List comments:
    <table>
@@ -75,4 +51,31 @@
     <% end %>
     </tbody>
 </table>
+
+<div class="add_comments">Add comment:</div>
+<.form
+    let={f}
+    for={@changeset}
+    id="comments-form"
+    phx-change="validate_comment"
+    phx-submit="save">
+  
+
+    <%= label f, :Nickname %>
+    <%= text_input f, :name, required: true, phx_debounce: "blur" %>
+    <%= error_tag f, :name %>
+
+    <%= label f, :Text %>
+    <%= textarea f, :body, required: true, phx_debounce: "blur" %>
+    <%= error_tag f, :body %>
+  
+
+
+  
+    <div>
+      <%= submit "Save", phx_disable_with: "Saving..." %>
+    </div>
+  </.form>
+
+
 <span><%= live_redirect "Back", to: Routes.post_index_path(@socket, :index) %></span>
