@@ -21,9 +21,8 @@ A list of posts is displayed on the home page. It is possible to create a new on
 [![Screenshot-from-2021-11-11-09-40-48.png](https://i.postimg.cc/DfY5csb9/Screenshot-from-2021-11-11-09-40-48.png)](https://postimg.cc/F13jrYpp)
 
 # Stack
-Application developed with the elixir programming language and phoenix framework + phoenix liveview
+The application is developed using the elixir programming language and phoenix framework + phoenix liveview.Postgresql is used as the database.
 
-The application is developed using the elixir programming language and phoenix framework + phoenix liveview. Postgresql is used as the database.
 One of the main advantages of elixir is the speed and fault tolerance system.
 In Elixir, supervisors are tasked with restarting processes when they fail. Instead of trying to handle all possible exceptions within a process, the “Let it crash”-philosophy shifts the burden of recovering from such failures to the process' supervisor.
 
